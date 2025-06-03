@@ -2,11 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'auth_events.dart';
 import 'auth_states.dart';
+import '../../../data/repositories/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthState> {
-  final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final AuthRepository authRepository;
+  final _storage = FlutterSecureStorage();
 
-  AuthBloc(): super(EntryLoad()) {
+  AuthBloc(this.authRepository): super(EntryLoad()) {
 
     on<AppStarted>((event,emit) async {
       emit(EntryLoad());
@@ -35,30 +37,23 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     on<LoginRequest>((event, emit) async{
       emit(EntryLoad());
 
-      await Future.delayed(Duration(seconds: 2));
-
-      if(event.id=="hello" && event.password=="hello123"){
-        await _storage.write(key: 'token', value: 'mock_jwt_token');
-        emit(LoginSuccess());
-      }
+      final succ = await authRepository.login(event.id,event.password);
+      if(succ){emit(LoggedIn());}
       else{
         emit(LoginError("Invalid Credentials"));
       }
+
     });
 
     on<SignUpReq>((event, emit)async {
       emit(EntryLoad());
 
-      await Future.delayed(Duration(seconds: 2));
+      final succ = await authRepository.signUp(event.name, event.id, event.password);
 
-       if (event.id.isNotEmpty &&
-          event.email.contains('@') &&
-          event.password.length >= 6){
-    
-          await _storage.write(key: 'token', value: 'mock_jwt_token_after_signup');
-          emit(SignUpSuccess());
-      } 
-      else {
+      if(succ){
+        emit(LoginState());
+      }
+      else{
         emit(SignUpError());
       }
     });
