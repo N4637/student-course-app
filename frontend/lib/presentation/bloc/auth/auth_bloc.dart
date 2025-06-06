@@ -1,62 +1,73 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'auth_events.dart';
 import 'auth_states.dart';
 import '../../../data/repositories/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthState> {
   final AuthRepository authRepository;
-  final _storage = FlutterSecureStorage();
 
-  AuthBloc(this.authRepository): super(EntryLoad()) {
-
-    on<AppStarted>((event,emit) async {
+  AuthBloc(this.authRepository) : super(EntryLoad()) {
+    on<AppStarted>((event, emit) async {
       emit(EntryLoad());
-      final token = await _storage.read(key: 'token');
-
-      if(token!=null && token.isNotEmpty){
+      final hasToken = await authRepository.hasToken();
+      if (hasToken) {
         emit(LoggedIn());
-      }
-      else{
+      } else {
         emit(LoginState());
       }
     });
-    
+
     on<ShowLoginPage>((event, emit) {
       emit(LoginState());
     });
 
-    on<ShowSignPage>((event, emit){
+    on<ShowSignPage>((event, emit) {
       emit(SignUpState());
     });
 
-    on<ShowHomePage>((event, emit){
+    on<ShowHomePage>((event, emit) {
       emit(LoggedIn());
     });
 
-    on<LoginRequest>((event, emit) async{
+    on<LoginRequest>((event, emit) async {
       emit(EntryLoad());
-
-      final succ = await authRepository.login(event.id,event.password);
-      if(succ){emit(LoggedIn());}
-      else{
-        emit(LoginError("Invalid Credentials"));
+      try {
+        final success = await authRepository.login(event.email, event.password);
+        if (success) {
+          emit(LoggedIn());
+        } else {
+          emit(LoginError("Invalid Credentials"));
+        }
+      } catch (e) {
+        emit(LoginError("Something went wrong. Please try again."));
       }
-
     });
 
-    on<SignUpReq>((event, emit)async {
+    on<SignUpReq>((event, emit) async {
       emit(EntryLoad());
+      try {
+        final success = await authRepository.register(
+          event.name,
+          event.email,
+          event.password,
+        );
 
-      final succ = await authRepository.signUp(event.name, event.id, event.password);
-
-      if(succ){
-        emit(LoginState());
-      }
-      else{
+        if (success) {
+          emit(SignUpSuccess());
+           
+          //emit(LoginState());
+        } else {
+          emit(SignUpError());
+        }
+      } catch (e) {
         emit(SignUpError());
       }
     });
 
+    on<LogoutEvent>((event, emit) async {
+      await authRepository.deleteToken();
+      emit(LogoutState());
+      emit(LoginState());
+    });
   }
 }
