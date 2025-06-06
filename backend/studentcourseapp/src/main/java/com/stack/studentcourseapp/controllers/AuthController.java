@@ -1,7 +1,7 @@
 package com.stack.studentcourseapp.controllers;
 
 import com.stack.studentcourseapp.dto.*;
-import com.stack.studentcourseapp.model.Student;
+import com.stack.studentcourseapp.models.Student;
 import com.stack.studentcourseapp.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

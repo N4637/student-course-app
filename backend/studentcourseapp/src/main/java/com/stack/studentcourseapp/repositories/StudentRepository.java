@@ -1,7 +1,7 @@
 package com.stack.studentcourseapp.repositories;
 
-import com.stack.studentcourseapp.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.stack.studentcourseapp.models.Student;
 import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {

@@ -1,7 +1,7 @@
 package com.stack.studentcourseapp.services;
 
-import com.stack.studentcourseapp.model.Student;
 import com.stack.studentcourseapp.security.JwtUtil;
+import com.stack.studentcourseapp.models.Student;
 import com.stack.studentcourseapp.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

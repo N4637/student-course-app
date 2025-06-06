@@ -1,6 +1,6 @@
 package com.stack.studentcourseapp.services;
 
-import com.stack.studentcourseapp.model.Student;
+import com.stack.studentcourseapp.models.Student;
 
 public interface AuthService {
     String register(Student student);
