@@ -1,19 +1,14 @@
 package com.stack.studentcourseapp.services;
 
-import java.util.Optional;
 import java.util.List;
 import com.stack.studentcourseapp.models.*;
-import com.stack.studentcourseapp.services.GetCoursesService;
 import com.stack.studentcourseapp.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.stack.studentcourseapp.repositories.StudentRepository;
+
 
 @Service
 public class GetCourseImpl implements GetCoursesService {
-    
-    @Autowired
-    private StudentRepository sRepo;
 
     @Override
     public List<Course> enrolledCourses(Student student) {

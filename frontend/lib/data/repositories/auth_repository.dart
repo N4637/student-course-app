@@ -2,40 +2,49 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../dataProvider/auth_provider.dart';
 
 class AuthRepository {
-    final AuthProvider authProvider;
-    final FlutterSecureStorage _storage = FlutterSecureStorage();
-    
-    AuthRepository(this.authProvider);
+  final AuthProvider authProvider;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-    Future<void> createToken(String token) async {
-      await _storage.write(key:'token', value:token);
-    }
+  AuthRepository(this.authProvider);
 
-    Future<void> deleteToken() async {
-      await _storage.delete(key:'token');
-    }
+  Future<void> createToken(String token) async {
+    await _storage.write(key: 'token', value: token);
+  }
 
-    Future<bool> hasToken() async {
-        final token = await _storage.read(key: 'token');
-        if(token!=null && token.isNotEmpty){return true;}
-        else{return false;}
-    }
+  Future<void> deleteToken() async {
+    await _storage.delete(key: 'token');
+  }
 
-    Future<bool> login(String id , String password) async {
-      final token = await authProvider.login(id,password);
-      if(token!=null && token.isNotEmpty){
+  Future<String?> getToken() async {
+    return await _storage.read(key: 'token');
+  }
+
+  Future<bool> hasToken() async {
+    final token = await _storage.read(key: 'token');
+    return token != null && token.isNotEmpty;
+  }
+
+  Future<bool> login(String email, String password) async {
+    try {
+      final token = await authProvider.login(email, password);
+      if (token != null && token.isNotEmpty) {
         await createToken(token);
         return true;
       }
-      else{return false;}
+    } catch (e) {return false;
     }
+    return false;
+  }
 
-    Future<bool> signUp(String name, String id, String password) async {
-      final token = await authProvider.signUp(name,id,password);
-      if(token!=null && token.isNotEmpty){
+  Future<bool> register(String name, String email, String password) async {
+    try {
+      final token = await authProvider.register(name, email, password);
+      if (token != null && token.isNotEmpty) {
         await createToken(token);
         return true;
       }
-      else{return false;}
+    } catch (e) {return false;
     }
+    return false;
+  }
 }

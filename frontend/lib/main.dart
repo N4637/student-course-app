@@ -9,24 +9,26 @@ import './presentation/bloc/auth/auth_bloc.dart';
 import './presentation/bloc/auth/auth_events.dart';
 import './presentation/bloc/auth/auth_states.dart';
 
+import 'package:http/http.dart' as http;
 
 void main() {
-  final authProvider = AuthProvider();
-  final authRepository = AuthRepository(authProvider);
-  final authBloc = AuthBloc(authRepository);
-
-  runApp(MyApp(authBloc: authBloc));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final AuthBloc authBloc;
+  MyApp({super.key});
 
-  MyApp({super.key, required this.authBloc});
+  final authProvider = AuthProvider(client: http.Client());
+  late final authRepository = AuthRepository(authProvider);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => authBloc..add(AppStarted()),
+      create: (context) {
+        final bloc = AuthBloc(authRepository);
+        bloc.add(AppStarted());
+        return bloc;
+      },
       child: MaterialApp(
         title: 'Student Enroll App',
         home: BlocBuilder<AuthBloc, AuthState>(
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
               return const Scaffold(
                 body: Center(child: CircularProgressIndicator()),
               );
-            } else if (state is LoggedIn || state is LoginSuccess) {
+            } else if (state is LoggedIn) {
               return HomeScreen();
             } else if (state is SignUpState) {
               return SignUpScreen();
@@ -48,4 +50,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

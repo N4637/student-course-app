@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/auth/auth_bloc.dart'; 
+import '../bloc/auth/auth_bloc.dart';
 import '../bloc/auth/auth_events.dart';
 import '../bloc/auth/auth_states.dart';
 
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({super.key});
+  const SignUpScreen({super.key});
   @override
   State<SignUpScreen> createState() => SignUpScreenState();
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _idController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pswdController = TextEditingController();
   final TextEditingController _confController = TextEditingController();
 
-  void _onCreate() {
+  void _onCreate(BuildContext context) {
     if (_pswdController.text != _confController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Passwords do not match")),
@@ -28,7 +27,6 @@ class SignUpScreenState extends State<SignUpScreen> {
     context.read<AuthBloc>().add(
       SignUpReq(
         name: _nameController.text,
-        id: _idController.text,
         email: _emailController.text,
         password: _pswdController.text,
       ),
@@ -45,8 +43,12 @@ class SignUpScreenState extends State<SignUpScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Account Created Successfully")),
             );
-            context.read<AuthBloc>().add(ShowLoginPage());
+
+            Future.delayed(Duration(seconds: 1), () {
+              context.read<AuthBloc>().add(ShowLoginPage());
+            });
           }
+
 
           if (state is SignUpError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -55,11 +57,6 @@ class SignUpScreenState extends State<SignUpScreen> {
           }
         },
         builder: (context, state) {
-          if (state is EntryLoad) {
-            return Center(
-              child: CircularProgressIndicator(color: Colors.deepPurpleAccent),
-            );
-          }
 
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -69,11 +66,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(labelText: "Enter Your Name"),
-                  ),
-                  TextFormField(
-                    controller: _idController,
-                    decoration:
-                        InputDecoration(labelText: "Enter Your Enrollment Id"),
                   ),
                   TextFormField(
                     controller: _emailController,
@@ -90,10 +82,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                     obscureText: true,
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _onCreate,
+                  Builder(
+                    builder: (localContext) => ElevatedButton(
+                    onPressed: () => _onCreate(localContext),
                     child: Text("Create Account"),
-                  ),
+  ),
+),
                 ],
               ),
             ),
