@@ -25,11 +25,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with custom config
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                .requestMatchers("/api/enrolledCourses").authenticated()
+                .requestMatchers("/api/enrolledCourses/**").authenticated()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -52,14 +52,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // CORS configuration allowing all origins and methods — adjust as needed
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // or specify your frontend origin here, e.g. "http://localhost:3000"
+        configuration.setAllowedOrigins(List.of("*")); 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // if you want to allow credentials/cookies, set origin explicitly instead of "*"
+        configuration.setAllowCredentials(true); 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
