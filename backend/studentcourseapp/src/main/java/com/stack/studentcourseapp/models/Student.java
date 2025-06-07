@@ -30,7 +30,6 @@ public class Student {
 
     @ManyToMany
     @JoinTable(name = "enrolled", joinColumns = @JoinColumn(name = "studen_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-
     private List<Course> enrolledCourses;
 
     public Student() {
@@ -42,6 +41,7 @@ public class Student {
         this.name = name;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -80,5 +80,21 @@ public class Student {
 
     public void setEnrolledCourses(List<Course> enrolledCourses) {
         this.enrolledCourses = enrolledCourses;
+    }
+
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Student student = (Student) o;
+
+        return email != null ? email.equals(student.email) : student.email == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return email != null ? email.hashCode() : 0;
     }
 }
