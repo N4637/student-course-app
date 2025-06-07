@@ -21,9 +21,9 @@ public class UpdateImpl implements UpdateService {
     @Override
     @Transactional
     public void addCourse(List<Course> courses, Student student) {
-        for (Course c : courses) {
-            Course thisCourse = cRepo.findByCourseCode(c.getCourseCode())
-                    .orElseThrow(() -> new RuntimeException("Course not found: " + c.getCourseCode()));
+        for (Course course : courses) {
+            Course thisCourse = cRepo.findByCourseCode(course.getCourseCode())
+                    .orElseThrow(() -> new RuntimeException("Course not found: " + course.getCourseCode()));
 
             if (!student.getEnrolledCourses().contains(thisCourse)) {
                 student.getEnrolledCourses().add(thisCourse);

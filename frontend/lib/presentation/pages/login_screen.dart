@@ -6,47 +6,50 @@ import '../bloc/auth/auth_states.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => LoginScreenState();
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _mailController = TextEditingController();
-  final TextEditingController _psswdController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  void _onLogPress() => context.read<AuthBloc>().add(
-    LoginRequest(email: _mailController.text, password: _psswdController.text),
-  );
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
-  void _onSignPress() => context.read<AuthBloc>().add(ShowSignPage());
+  void login() {
+    context.read<AuthBloc>().add(
+      LoginRequest(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      ),
+    );
+  }
+
+  void _goToSignUp() => context.read<AuthBloc>().add(ShowSignPage());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: const Text("Login")),
       body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) async {
+        listener: (context, state) {
           if (state is LoggedIn) {
-            await Future.delayed(Duration(milliseconds: 100));
-            if (mounted) {
-              Navigator.pushReplacementNamed(context, '/home');
-            }
-          }
-
-          if (state is LoginError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Log In Failed"),
-                duration: Duration(seconds: 3),
-              ),
-            );
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (state is LoginError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text("Login Failed")));
           }
         },
         builder: (context, state) {
           if (state is EntryLoad) {
-            return Center(
-              child: CircularProgressIndicator(color: Colors.deepPurpleAccent),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           return Padding(
@@ -54,39 +57,35 @@ class LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _mailController,
-                          decoration: InputDecoration(
-                            labelText: 'Enter Your Email',
-                          ),
+                  child: ListView(
+                    children: [
+                      TextField(
+                        controller: emailController,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: passwordController,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
                         ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          controller: _psswdController,
-                          decoration: InputDecoration(
-                            labelText: 'Enter Password',
-                          ),
-                          obscureText: true,
-                        ),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _onLogPress,
-                          child: Text('Login'),
-                        ),
-                      ],
-                    ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: login,
+                        child: const Text('Login'),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account? "),
-                    ElevatedButton(
-                      onPressed: _onSignPress,
-                      child: Text("Sign Up"),
+                    const Text("Don't have an account? "),
+                    TextButton(
+                      onPressed: _goToSignUp,
+                      child: const Text("Sign Up"),
                     ),
                   ],
                 ),
