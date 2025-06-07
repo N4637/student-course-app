@@ -11,13 +11,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _pswdController = TextEditingController();
-  final TextEditingController _confController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pswdController = TextEditingController();
+  final TextEditingController confController = TextEditingController();
 
   void _onCreate(BuildContext context) {
-    if (_pswdController.text != _confController.text) {
+    if (pswdController.text != confController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Passwords do not match")),
       );
@@ -26,9 +26,9 @@ class SignUpScreenState extends State<SignUpScreen> {
 
     context.read<AuthBloc>().add(
       SignUpReq(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _pswdController.text,
+        name: nameController.text,
+        email: emailController.text,
+        password: pswdController.text,
       ),
     );
   }
@@ -43,12 +43,8 @@ class SignUpScreenState extends State<SignUpScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Account Created Successfully")),
             );
-
-            Future.delayed(Duration(seconds: 1), () {
-              context.read<AuthBloc>().add(ShowLoginPage());
-            });
+            context.read<AuthBloc>().add(ShowLoginPage());
           }
-
 
           if (state is SignUpError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -64,20 +60,20 @@ class SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _nameController,
+                    controller: nameController,
                     decoration: InputDecoration(labelText: "Enter Your Name"),
                   ),
                   TextFormField(
-                    controller: _emailController,
+                    controller: emailController,
                     decoration: InputDecoration(labelText: "Enter Your Email"),
                   ),
                   TextFormField(
-                    controller: _pswdController,
+                    controller: pswdController,
                     decoration: InputDecoration(labelText: "Enter Password"),
                     obscureText: true,
                   ),
                   TextFormField(
-                    controller: _confController,
+                    controller: confController,
                     decoration: InputDecoration(labelText: "Confirm Password"),
                     obscureText: true,
                   ),
