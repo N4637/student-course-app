@@ -18,8 +18,8 @@ class AuthProvider {
         }),
       );
       return _handleResponse(response);
-    } catch (e) {
-      throw Exception('Login failed: ${e.toString()}');
+    } catch (error) {
+      throw Exception('Login failed: ${error}');
     }
   }
 
@@ -35,8 +35,8 @@ class AuthProvider {
         }),
       );
       return _handleResponse(response);
-    } catch (e) {
-      throw Exception('Registration failed: ${e.toString()}');
+    } catch (error) {
+      throw Exception('Registration failed: ${error}');
     }
   }
 
