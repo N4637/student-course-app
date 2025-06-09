@@ -35,64 +35,73 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is LoggedIn) {
-            Navigator.pushReplacementNamed(context, '/home');
-          } else if (state is LoginError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text("Login Failed")));
-          }
-        },
-        builder: (context, state) {
-          if (state is EntryLoad) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF9796F0), Color(0xFFFBC7D4)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is LoggedIn) {
+              Navigator.pushReplacementNamed(context, '/home');
+            } else if (state is LoginError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Login Failed")),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is EntryLoad) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      TextField(
-                        controller: emailController,
-                        decoration: const InputDecoration(labelText: 'Email'),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        TextField(
+                          controller: emailController,
+                          decoration: const InputDecoration(labelText: 'Email'),
                         ),
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: login,
-                        child: const Text('Login'),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: passwordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                          ),
+                          obscureText: true,
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: login,
+                          child: const Text('Login'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account? "),
+                      TextButton(
+                        onPressed: _goToSignUp,
+                        child: const Text("Sign Up"),
                       ),
                     ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account? "),
-                    TextButton(
-                      onPressed: _goToSignUp,
-                      child: const Text("Sign Up"),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

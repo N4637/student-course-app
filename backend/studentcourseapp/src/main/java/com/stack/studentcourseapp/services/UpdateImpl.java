@@ -37,13 +37,13 @@ public class UpdateImpl implements UpdateService {
     }
 
     @Override
-    public void dropCourse(List<Course> coursesFromFrontend, Student student) {
-        for (Course c : coursesFromFrontend) {
+    public void dropCourse(List<Course> courses, Student student) {
+        for (Course c : courses) {
             Optional<Course> course = cRepo.findByCourseCode(c.getCourseCode());
             Course thisCourse = course.get();
             
                 thisCourse.getEnrolledStudents().remove(student);
-                student.getEnrolledCourses().remove(course);
+                student.getEnrolledCourses().remove(thisCourse);
                 cRepo.save(thisCourse);
             
         sRepo.save(student);

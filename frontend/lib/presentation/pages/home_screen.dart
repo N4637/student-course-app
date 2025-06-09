@@ -12,22 +12,30 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-        centerTitle: true,
-        backgroundColor: Colors.deepPurple,
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF9796F0), Color(0xFFFBC7D4)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
       ),
-      body: Container(
-        child: ListView(
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // Let the gradient show through
+        appBar: AppBar(
+          title: const Text('Home Page'),
+          centerTitle: true,
+          backgroundColor: Colors.deepPurple,
+        ),
+        body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             ListTile(
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 vertical: 25,
                 horizontal: 16,
               ),
-              tileColor: const Color.fromARGB(255, 153, 172, 208),
+              tileColor: const Color.fromARGB(255, 224, 196, 240),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -47,11 +55,11 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 80),
             ListTile(
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 vertical: 25,
                 horizontal: 16,
               ),
-              tileColor: const Color.fromARGB(255, 153, 172, 208),
+              tileColor: const Color.fromARGB(255, 224, 196, 240),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -67,11 +75,11 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 80),
             ListTile(
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 vertical: 25,
                 horizontal: 16,
               ),
-              tileColor: const Color.fromARGB(255, 153, 172, 208),
+              tileColor: const Color.fromARGB(255, 224, 196, 240),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -87,11 +95,11 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 80),
             ListTile(
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 vertical: 25,
                 horizontal: 16,
               ),
-              tileColor: const Color.fromARGB(255, 153, 172, 208),
+              tileColor: const Color.fromARGB(255, 224, 196, 240),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
