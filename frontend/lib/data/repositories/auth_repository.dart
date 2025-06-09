@@ -20,8 +20,7 @@ class AuthRepository {
   }
 
   Future<bool> hasToken() async {
-    final token = await _storage.read(key: 'token');
-    return token != null && token.isNotEmpty;
+    return authProvider.validate();
   }
 
   Future<bool> login(String email, String password) async {

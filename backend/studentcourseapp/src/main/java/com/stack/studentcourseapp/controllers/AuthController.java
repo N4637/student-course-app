@@ -3,6 +3,9 @@ package com.stack.studentcourseapp.controllers;
 import com.stack.studentcourseapp.dto.*;
 import com.stack.studentcourseapp.models.Student;
 import com.stack.studentcourseapp.services.AuthService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +42,10 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(401).body(Map.of("message", e.getMessage()));
         }
+    }
+
+    @GetMapping("/api/auth/validate")
+    public ResponseEntity<?> validate(HttpServletRequest request){
+         return ResponseEntity.ok("Valid token");
     }
 }
