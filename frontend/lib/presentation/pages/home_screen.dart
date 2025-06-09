@@ -21,11 +21,11 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent, // Let the gradient show through
+        backgroundColor: Colors.transparent, 
         appBar: AppBar(
-          title: const Text('Home Page'),
+          title: const Text('Course Dashboard'),
           centerTitle: true,
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: const Color.fromARGB(255, 204, 156, 212),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),

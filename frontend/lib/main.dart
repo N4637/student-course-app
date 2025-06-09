@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Student Enroll App',
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) => const HomeScreen(),
           '/enrolledCourses': (context) => const EnrolledCoursesScreen(),

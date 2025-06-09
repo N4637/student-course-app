@@ -50,9 +50,9 @@ class LoginScreenState extends State<LoginScreen> {
             if (state is LoggedIn) {
               Navigator.pushReplacementNamed(context, '/home');
             } else if (state is LoginError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Login Failed")),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text("Login Failed")));
             }
           },
           builder: (context, state) {
@@ -60,44 +60,41 @@ class LoginScreenState extends State<LoginScreen> {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView(
+            return Center(
+              child: SingleChildScrollView(
+                // to prevent overflow on small screens
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: emailController,
+                      decoration: const InputDecoration(labelText: 'Email'),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: passwordController,
+                      decoration: const InputDecoration(labelText: 'Password'),
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: login,
+                      child: const Text('Login'),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextField(
-                          controller: emailController,
-                          decoration: const InputDecoration(labelText: 'Email'),
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: passwordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                          ),
-                          obscureText: true,
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: login,
-                          child: const Text('Login'),
+                        const Text("Don't have an account? "),
+                        TextButton(
+                          onPressed: _goToSignUp,
+                          child: const Text("Sign Up"),
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      TextButton(
-                        onPressed: _goToSignUp,
-                        child: const Text("Sign Up"),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

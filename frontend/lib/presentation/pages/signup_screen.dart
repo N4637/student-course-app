@@ -18,9 +18,9 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   void _onCreate(BuildContext context) {
     if (pswdController.text != confController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Passwords do not match")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
       return;
     }
 
@@ -61,34 +61,42 @@ class SignUpScreenState extends State<SignUpScreen> {
             }
           },
           builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
+            return Center(
               child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
                       controller: nameController,
-                      decoration:
-                          const InputDecoration(labelText: "Enter Your Name"),
+                      decoration: const InputDecoration(
+                        labelText: "Enter Your Name",
+                      ),
                     ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: emailController,
-                      decoration:
-                          const InputDecoration(labelText: "Enter Your Email"),
+                      decoration: const InputDecoration(
+                        labelText: "Enter Your Email",
+                      ),
                     ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: pswdController,
-                      decoration:
-                          const InputDecoration(labelText: "Enter Password"),
+                      decoration: const InputDecoration(
+                        labelText: "Enter Password",
+                      ),
                       obscureText: true,
                     ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: confController,
-                      decoration:
-                          const InputDecoration(labelText: "Confirm Password"),
+                      decoration: const InputDecoration(
+                        labelText: "Confirm Password",
+                      ),
                       obscureText: true,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     Builder(
                       builder: (localContext) => ElevatedButton(
                         onPressed: () => _onCreate(localContext),

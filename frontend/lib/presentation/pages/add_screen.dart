@@ -22,6 +22,7 @@ class EnrollCourseScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Available Courses'),
+          backgroundColor: const Color.fromARGB(255, 204, 156, 212),
         ),
         body: BlocBuilder<CourseBloc, CourseState>(
           builder: (context, state) {
