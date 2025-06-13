@@ -1,6 +1,5 @@
 package com.stack.studentcourseapp.security;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -12,18 +11,19 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY;
     private SecretKey key;
 
-    private final long EXPIRATION_TIME = 3600000; 
+    private final long EXPIRATION_TIME = 3600000; // 1 hour
 
     @PostConstruct
     public void init() {
-        
-        Dotenv dotenv = Dotenv.load();
-        SECRET_KEY = dotenv.get("JWT_SECRET");
+        String secret = System.getenv("JWT_SECRET");  // Read from environment
 
-        key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        if (secret == null || secret.isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET environment variable is not set.");
+        }
+
+        key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(String email) {
