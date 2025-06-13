@@ -13,7 +13,7 @@ public class StudentcourseappApplication {
         System.setProperty("DB_URL", dotenv.get("DB_URL"));
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-
+        System.setProperty("APP_PASSWORD",dotenv.get("APP_PASSWORD"));
         SpringApplication.run(StudentcourseappApplication.class, args);
     }
 }
