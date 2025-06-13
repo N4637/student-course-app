@@ -3,6 +3,7 @@ package com.stack.studentcourseapp.controllers;
 import com.stack.studentcourseapp.models.*;
 import com.stack.studentcourseapp.repositories.CourseRepository;
 import com.stack.studentcourseapp.repositories.StudentRepository;
+import com.stack.studentcourseapp.services.EmailService;
 import com.stack.studentcourseapp.services.UpdateService;
 
 import java.util.List;
@@ -26,18 +27,24 @@ public class UpdateController {
     @Autowired
     private CourseRepository cRepo;
 
+    @Autowired
+    private EmailService mailService;
+
     @PostMapping("/api/enrolledCourses/add")
     public ResponseEntity<?> enroll(Authentication authentication, @RequestBody List<Course> courses) {
         String email = authentication.getName();
+        Course thisCourse = courses.get(0);
         Optional<Student> thisStudent = sRepo.findByEmail(email);
         if (thisStudent.isEmpty()) {
             return ResponseEntity.badRequest().body("Student not found");
         }
         Student student = thisStudent.get();
 
-
         updateService.addCourse(courses, student);
         sRepo.save(student);
+
+        mailService.sendEmail(student.getEmail(), "Course Enrollment",
+        "You have successfully enrolled in the course : " + thisCourse.getCourseName()+":"+thisCourse.getCourseCode());
 
         return ResponseEntity.ok(student.getEnrolledCourses());
     }
@@ -50,6 +57,7 @@ public class UpdateController {
             return ResponseEntity.badRequest().body("Student not found");
         }
         Student student = thisStudent.get();
+        Course thisCourse = courses.get(0);
 
         List<Course> persistentCourses = courses.stream()
                 .map(course -> cRepo.findByCourseCode(course.getCourseCode())
@@ -59,6 +67,9 @@ public class UpdateController {
 
         updateService.dropCourse(persistentCourses, student);
         sRepo.save(student);
+
+        mailService.sendEmail(student.getEmail(), "Course Drop",
+        "You have dropped the following course : " + thisCourse.getCourseName()+":"+thisCourse.getCourseCode());
 
         return ResponseEntity.ok(student.getEnrolledCourses());
     }
