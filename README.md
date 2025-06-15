@@ -28,5 +28,6 @@ This is a full-stack application that allows students to:
   - Enroll in desired courses
   - Drop enrolled courses
   - View list of currently enrolled courses
+  - Email notification each time a student drops or enroll in a course
 
 ---
